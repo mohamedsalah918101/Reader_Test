@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   double greenValue = 0.0;
   double blueValue = 0.0;
 
+  // ٍPresent the assets file
   fetchFileData()async{
     String responseText;
     responseText = await rootBundle.loadString('assets/story.txt');
@@ -39,12 +40,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  // Zoom in function
   void _zoomIn() {
     setState(() {
       _fontSize += 2.0;
     });
   }
 
+  // Zoom out function
   void _zoomOut() {
     if (_fontSize > 8.0) {
       setState(() {
@@ -53,6 +56,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Search UI Dialog
   void _search() {
     showDialog(
       context: context,
@@ -94,7 +98,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  List<TextSpan> _highlightOccurrences(String text, String query) {
+  // Highlight the Searched Text with Red color by using Regular Expression
+  List<TextSpan> _highlightFoundedText(String text, String query) {
     List<TextSpan> spans = [];
     RegExp regex = RegExp(query, caseSensitive: false);
     Iterable<Match> matches = regex.allMatches(text);
@@ -120,6 +125,7 @@ class _HomePageState extends State<HomePage> {
     return spans;
   }
 
+  // Change the entire Text Color by RGB
   void _updateRed(double value) {
     setState(() {
       redValue = value;
@@ -138,12 +144,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // apply the Color
   void _applyColor() {
     setState(() {
       textColor = Color.fromARGB(255, redValue.toInt(), greenValue.toInt(), blueValue.toInt());
     });
   }
 
+  // the Slider UI
   Slider _buildSlider(String label, double value, Color activeColor, Color inactiveColor, Function(double) onChanged) {
     return Slider(
       value: value,
@@ -164,20 +172,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // The basic building screen UI
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text("ReaderTest", style: TextStyle(color: Colors.white),),
       ),
+      // for Scrolling
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
+              // For Select Text
               child: SelectableText.rich(
                 TextSpan(
                   style: TextStyle(fontSize: _fontSize, color: Colors.black),
-                  children: _highlightOccurrences(data, searchText),
+                  children: _highlightFoundedText(data, searchText),
                 ),
                 textAlign: TextAlign.right,
                 textDirection: TextDirection.rtl,
@@ -187,6 +198,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      // Zoom in, Zoom out, Search, and Change Text Color
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -199,6 +211,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: _zoomOut,
               icon: const Icon(Icons.zoom_out, color: Colors.black, size: 30,),
             ),
+            // to Show the RGB Sliders
             PopupMenuButton(
               icon: const Icon(Icons.color_lens,color: Colors.deepOrange, size: 35,),
               itemBuilder: (BuildContext context) {
